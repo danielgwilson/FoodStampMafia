@@ -25,6 +25,13 @@ model <- merge(model, data.frame(
   by.x = 1,
   by.y = 1)
 
+model$GEO.id2 = as.numeric(model$GEO.id2)
 
-# engineered features
+model <- merge(model, data.frame(
+  GEO.id2 = raw_SNAP$FIPS,
+  SNAP_Recipients = raw_SNAP$PRGNUM10),
+  by.x = 1,
+  by.y = 1)
 
+model$SNAP_Recipients <- sub(',', '', as.character(model$SNAP_Recipients))
+model$SNAP_ParticipationRatio <- as.numeric(model$SNAP_Recipients) / as.numeric(model$Poverty_Sub125)
