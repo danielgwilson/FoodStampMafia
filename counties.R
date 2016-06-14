@@ -6,10 +6,17 @@ raw_Poverty <- read.csv("ACS_14_5YR_C17002_with_ann.csv", stringsAsFactors = FAL
 raw_Poverty <- raw_Poverty[-1,]
 
 
+##############################
+# ----------------------------
 # build main model dataset
 model <- data.frame(matrix(nrow = 3142))
 model$GEO.id <- raw_FoodStamps$GEO.id2
 model$County <- raw_FoodStamps$GEO.display.label
+
+# state filter
+model$State <- sub(' ', '', sapply(model$County, FUN = function(x) {strsplit(x, split = ",")[[1]][2]}))
+model$County <- sapply(model$County, FUN = function(x) {strsplit(x, split = ",")[[1]][1]})
+
 model$TotalHouseholds <- raw_FoodStamps$HC01_EST_VC01
 model$SNAP_Households <- raw_FoodStamps$HC02_EST_VC01
 model$Poverty_Sub100 <- as.numeric(raw_Poverty$HD01_VD02) + as.numeric(raw_Poverty$HD01_VD03)
@@ -19,25 +26,6 @@ model[1] <- NULL
 # engineered features
 model$SNAP_ParticipationRate <- as.numeric(model$SNAP_Households) / as.numeric(model$TotalHouseholds)
 model$SNAP_FillRate <- as.numeric(model$SNAP_Households) / as.numeric(model$Poverty_Sub100)
-
-
-# state filter
-
-model$State <- sub(' ', '', sapply(model$County, FUN = function(x) {strsplit(x, split = ",")[[1]][2]}))
-model$County <- sapply(model$County, FUN = function(x) {strsplit(x, split = ",")[[1]][1]})
-
-#####
-# Old filter that was way too much effort
-#####
-
-# state_FIPS <- read.csv("state_fips.csv", stringsAsFactors = FALSE)
-# as.numeric(substring(model$GEO.id[1],1,2))
-# model$State <- NA
-# state_FIPS <- state_FIPS[order(as.factor(state_FIPS$FIPS)), ]
-# model$GEO.id[500]
-# findInterval(as.numeric(substring(model$GEO.id[500],1,2)), state_FIPS$FIPS)
-# 
-# model$State = state_FIPS$State[findInterval(as.numeric(substring(model$GEO.id,1,2)), state_FIPS$FIPS)]
 
 
 # county with a specific SNAP_Participation_Rate
