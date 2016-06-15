@@ -1,4 +1,3 @@
-# County Data
 setwd("~/Google Drive/Booz/FoodStampMafia")
 rm(list=ls())
 raw_FoodStamps <- read.csv("ACS_14_5YR_S2201_with_ann.csv", stringsAsFactors = FALSE)
@@ -42,14 +41,5 @@ model <- merge(model, data.frame(
   by.x = 1,
   by.y = 1)
 model$Population <- sub(',', '', as.character(model$Population))
-
-# split into training and test sets
-smpl_size <- floor(0.75 * nrow(model))
-
-set.seed(1337)
-train_indeces <- sample(seq_len(nrow(model)), size = smpl_size)
-
-train <- model[train_indeces, ]
-test <- model[-train_indeces, ]
 
 write.csv(model, file = "daniel.csv", row.names = FALSE)
