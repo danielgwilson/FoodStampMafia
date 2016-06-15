@@ -53,13 +53,3 @@ train <- model[train_indeces, ]
 test <- model[-train_indeces, ]
 
 write.csv(model, file = "daniel.csv", row.names = FALSE)
-
-
-# random forest
-library(rpart)
-library(randomForest)
-fit <- randomForest(as.factor(SNAP_ParticipationRatio) ~ as.factor(State) + as.factor(Population),
-                   data=train,
-                   importance=TRUE,
-                   ntree=2000)
-varImpPlot(fit)
