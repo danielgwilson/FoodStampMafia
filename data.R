@@ -25,8 +25,6 @@ model <- merge(model, data.frame(
   by.x = 1,
   by.y = 1)
 
-model$FIPS = as.numeric(model$GEO.id2)
-
 model <- merge(model, data.frame(
   FIPS = raw_SNAP$FIPS,
   SNAP_Recipients = raw_SNAP$PRGNUM10),
@@ -40,6 +38,11 @@ model <- merge(model, data.frame(
   Population = raw_SNAP$POP10),
   by.x = 1,
   by.y = 1)
-model$Population <- sub(',', '', as.character(model$Population))
+model$Population <- as.numeric(gsub(',', '', as.character(model$Population)))
+summary(model$Population)
+
+
+# engineered features
+model$SNAP_RatioSub50 <- ifelse(model$SNAP_ParticipationRatio <= 0.75, 1, 0)
 
 write.csv(model, file = "daniel.csv", row.names = FALSE)
