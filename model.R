@@ -27,7 +27,7 @@ library(RColorBrewer)
 fancyRpartPlot(fit)
 
 library(caret)
-findInterval("Florida",(test[["State"]]))
+test <- test[-which(test$State == "District of Columbia"),]
 predictions <- predict(fit, test)
 print(predictions)
 distconfusionMatrix(predictions$class, y_test)
