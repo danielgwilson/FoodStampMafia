@@ -27,10 +27,10 @@ popcompare$pop2 <- popcount_final$POP10
 popcompare$pop1 <- sub(',', '', popcompare$pop1)
 popcompare$pop2 <- sub(',', '', popcompare$pop2)
 popcompare$popmedian <- (as.numeric(popcompare$pop1) + as.numeric(popcompare$pop2))/2
-popcompare <- popcompare[,-1]
-popcompare <- popcompare[,-1]
-popcompare <- popcompare[,-1]
 popcompare$FIPS <- popcount_final$FIPS
+popcompare <- popcompare[,-1]
+popcompare <- popcompare[,-1]
+popcompare <- popcompare[,-1]
 
 # done
 ready <- data.frame(FIPS = popcount_final$FIPS, pop_mean_2010 = popcompare$popmedian)
@@ -60,5 +60,44 @@ write.csv(ready, file = "UrbanRuralCodebook.csv", row.names = FALSE)
 
 # merge urban/rural status code to Elaine.csv
 popcompare <- merge(popcompare, data.frame(FIPS = urstatus$FIPS, UIC_2013 = urstatus$UIC_2013),
-               by.x = "FIPS", by.y = "FIPS")
+                    by.x = "FIPS", by.y = "FIPS", all = T)
 write.csv(popcompare, file = "Elaine.csv", row.names = FALSE)
+
+
+#
+#
+#
+
+###______________________________Race of people below 125% PL from 2014
+
+ACS <- read.csv("ACS_14_5YR_S1703_with_ann.csv", head=T, stringsAsFactors = FALSE)
+elaine <- read.csv("Elaine.csv", head=T, stringsAsFactors = F)
+# ACS$HC04_EST_VC22 # Sub125 Hispanic or Latino
+# ACS$HC04_EST_VC23 # Sub125 White
+# ACS$HC04_EST_VC15 # Sub125 Black
+# ACS$HC04_EST_VC16 # Sub125 American Indian and Alaska Native
+# ACS$HC04_EST_VC17 # Sub125 Asian
+# ACS$HC04_EST_VC18 # Sub125 Native Hawaiian and Other Pacific Islander
+# ACS$HC04_EST_VC19 # Sub125 Others
+# ACS$HC04_EST_VC20 # Sub125 2 or more races
+ACS$GEO.id2 <- as.numeric(ACS$GEO.id2)
+ACS$HC04_EST_VC22 <- (as.numeric(ACS$HC01_EST_VC22)/100) * as.numeric(ACS$HC04_EST_VC22)
+ACS$HC04_EST_VC23 <- (as.numeric(ACS$HC01_EST_VC23)/100) * as.numeric(ACS$HC04_EST_VC23)
+ACS$HC04_EST_VC15 <- (as.numeric(ACS$HC01_EST_VC15)/100) * as.numeric(ACS$HC04_EST_VC15)
+ACS$HC04_EST_VC16 <- (as.numeric(ACS$HC01_EST_VC16)/100) * as.numeric(ACS$HC04_EST_VC16)
+ACS$HC04_EST_VC17 <- (as.numeric(ACS$HC01_EST_VC17)/100) * as.numeric(ACS$HC04_EST_VC17)
+ACS$HC04_EST_VC18 <- (as.numeric(ACS$HC01_EST_VC18)/100) * as.numeric(ACS$HC04_EST_VC18)
+ACS$HC04_EST_VC19 <- (as.numeric(ACS$HC01_EST_VC19)/100) * as.numeric(ACS$HC04_EST_VC19)
+ACS$HC04_EST_VC20 <- (as.numeric(ACS$HC01_EST_VC20)/100) * as.numeric(ACS$HC04_EST_VC20)
+
+elaine <- merge(elaine, data.frame(GEO.id2 = ACS$GEO.id2,
+                                           Hispanic_Sub125 = ACS$HC04_EST_VC22,
+                                           White_Sub125 = ACS$HC04_EST_VC23,
+                                           Black_Sub125 = ACS$HC04_EST_VC15,
+                                           Native_Sub125 = ACS$HC04_EST_VC16,
+                                           Asian_Sub125 = ACS$HC04_EST_VC17,
+                                           Island_Sub125 = ACS$HC04_EST_VC18,
+                                           Others_Sub125 = ACS$HC04_EST_VC19,
+                                           More_Sub125 = ACS$HC04_EST_VC20),
+                by.x = "FIPS", by.y = "GEO.id2", all = T)
+write.csv(elaine, file = "Elaine.csv", row.names = FALSE)
