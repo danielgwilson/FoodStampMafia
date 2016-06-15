@@ -63,7 +63,7 @@ model$Population <- as.numeric(gsub(',', '', as.character(model$Population)))
 
 
 # Another engineered feature -- I want a boolean that is 1 if the SNAP ratio is below 75%, and 0 if it is above.
-model$SNAP_RatioSub50 <- ifelse(model$SNAP_ParticipationRatio <= 0.75, 1, 0)
+model$SNAP_RatioSub75 <- ifelse(model$SNAP_ParticipationRatio <= 0.75, 1, 0)
 
 # This saves your dataframe to a csv file and lets you use it elsewhere.
 write.csv(model, file = "daniel.csv", row.names = FALSE)
