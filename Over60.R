@@ -15,3 +15,21 @@ model$County <- raw_FoodStamps$GEO.display.label
 model$State <- sub(' ', '', sapply(model$County, FUN = function(x) {strsplit(x, split = ",")[[1]][2]}))
 model$County <- sapply(model$County, FUN = function(x) {strsplit(x, split = ",")[[1]][1]})
 
+model <- merge(model, data.frame(
+  FIPS = raw_SNAP$FIPS,
+  Population = raw_SNAP$POP10),
+  by.x = 1,
+  by.y = 1)
+model$Population <- as.numeric(gsub(',', '', as.character(model$Population)))
+summary(model$Population)
+
+model <- merge(model,
+               data.frame(
+                 FIPS = raw_AgeSex$GEO.id2,
+                 Total_Over60 = ((as.numeric(raw_AgeSex$HC01_EST_VC15) + as.numeric(raw_AgeSex$HC01_EST_VC16) + as.numeric(raw_AgeSex$HC01_EST_VC17) 
+                   + as.numeric(raw_AgeSex$HC01_EST_VC18) + as.numeric(raw_AgeSex$HC01_EST_VC19) + as.numeric(raw_AgeSex$HC01_EST_VC20))
+                   / 100 * as.numeric(raw_AgeSex$HC01_EST_VC01))),
+  by.x = 1, 
+  by.y = 1
+  )
+
