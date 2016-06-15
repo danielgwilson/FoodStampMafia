@@ -1,3 +1,10 @@
+##############################
+# ----------------------------
+# Danny's how-to-load-data guide for R
+# Please do not commit changes to this file on GitHub
+# ----------------------------
+##############################
+
 # initial stuff like setting the working directory
 setwd("~/Google Drive/Booz/FoodStampMafia")
 rm(list=ls()) # clears all variables from your workspace -- same as the sweepy broom thing on the right
@@ -16,7 +23,7 @@ raw_SNAP <- read.csv("snap_data.csv", stringsAsFactors = FALSE) # I didn't have 
 # ----------------------------
 ##############################
 model <- data.frame(matrix(nrow = 3142)) # create an empty data frame with the correct length
-model$FIPS <- raw_FoodStamps$GEO.id2 # copy the FIPS code column and make the header name FIPS
+model$FIPS <- as.numeric(raw_FoodStamps$GEO.id2) # copy the FIPS code column and make the header name FIPS
 model[1] <- NULL # delete the initial empty NAs column
 model$County <- raw_FoodStamps$GEO.display.label # copy the County Name, State column from the census data
 
@@ -27,7 +34,7 @@ model$County <- sapply(model$County, FUN = function(x) {strsplit(x, split = ",")
 # DIFFERENT NUMBER OF ROWS EXAMPLE -- use merge and a temporary two column dataframe to load in data with different lengths
 # note that I did some math while loading in Poverty_Sub125. Use as.numeric to get it to read properly.
 model <- merge(model, data.frame(
-  FIPS = raw_Poverty$GEO.id2, 
+  FIPS = as.numeric(raw_Poverty$GEO.id2), 
   Poverty_Sub125 = (as.numeric(raw_Poverty$HC04_EST_VC01) / 100.0) * as.numeric(raw_Poverty$HC01_EST_VC01)), 
   by.x = 1,
   by.y = 1)
