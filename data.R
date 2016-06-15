@@ -1,7 +1,7 @@
 ##############################
 # ----------------------------
 # Danny's how-to-load-data guide for R
-# Please do not commit changes to this file on GitHub
+# * Please do not commit changes to this file on GitHub *
 # ----------------------------
 ##############################
 
