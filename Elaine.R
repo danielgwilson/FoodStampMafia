@@ -91,4 +91,4 @@ elaine <- merge(elaine, data.frame(GEO.id2 = ACS$GEO.id2,
                                            Others_Sub125 = ACS$HC04_EST_VC19,
                                            More_Sub125 = ACS$HC04_EST_VC20),
                     by.x = "FIPS", by.y = "GEO.id2", all = T)
-
+write.csv(elaine, file = "Elaine.csv", row.names = FALSE)
