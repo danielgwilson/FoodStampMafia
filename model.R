@@ -11,3 +11,23 @@ train_indeces <- sample(seq_len(nrow(model)), size = smpl_size)
 
 train <- model[train_indeces, ]
 test <- model[-train_indeces, ]
+
+library(rpart)
+fit <- rpart(SNAP_RatioSub50 ~ Population + FIPS + State, data=train, method = "class")
+plot(fit)
+text(fit)
+
+#install.packages('rattle')
+#install.packages('rpart.plot')
+#install.packages('RColorBrewer')
+library(rattle)
+library(rpart.plot)
+library(RColorBrewer)
+
+fancyRpartPlot(fit)
+
+library(caret)
+test <- test[-which(test$State == "District of Columbia"),]
+predictions <- predict(fit, test)
+print(predictions)
+distconfusionMatrix(predictions$class, y_test)
