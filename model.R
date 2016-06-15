@@ -21,7 +21,7 @@ train <- model[train_indeces, ] # save the sample indeces to train
 test <- model[-train_indeces, ] # save everything BUT the sample indeces to test
 
 library(rpart)
-fit <- rpart(SNAP_RatioSub50 ~ Population + FIPS + State, data=train, method = "class")
+fit <- rpart(SNAP_RatioSub50 ~ Population + FIPS, data=train, method = "class")
 plot(fit)
 text(fit)
 
