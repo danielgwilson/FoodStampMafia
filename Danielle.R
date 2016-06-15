@@ -17,12 +17,37 @@ model$State <- sub(' ', '', sapply(model$County, FUN = function(x) {strsplit(x, 
 model$County <- sapply(model$County, FUN = function(x) {strsplit(x, split = ",")[[1]][1]})
 
 model <- merge(model, data.frame(
-  FIPS = raw_AgeSex$GEO.id2,
-  Children_Under18 = (
-    as.numeric(raw_AgeSex$HC01_EST_VC03) + as.numeric(raw_AgeSex$HC01_EST_VC04) + as.numeric(raw_AgeSex$HC01_EST_VC05) + as.numeric(raw_AgeSex$HC01_EST_VC06)
-    ) / 100 * as.numeric(raw_AgeSex$HC01_EST_VC01)
-  ),
+  FIPS = raw_SNAP$FIPS,
+  Population = raw_SNAP$POP10),
   by.x = 1,
   by.y = 1)
+model$Population <- as.numeric(gsub(',', '', as.character(model$Population)))
+summary(model$Population)
+
+model <- merge(model, 
+               data.frame(
+                 FIPS = raw_AgeSex$GEO.id2,
+                 TotalChildren_Under18 = ((as.numeric(raw_AgeSex$HC01_EST_VC03) + as.numeric(raw_AgeSex$HC01_EST_VC04) + as.numeric(raw_AgeSex$HC01_EST_VC05) + as.numeric(raw_AgeSex$HC01_EST_VC06))
+                                          / 100 * as.numeric(raw_AgeSex$HC01_EST_VC01))
+                 ),
+               by.x = 1,
+               by.y = 1)
+
+model <- merge(model, data.frame(
+  FIPS = raw_SNAP$FIPS,
+  SNAP_Recipients = raw_SNAP$PRGNUM10),
+  by.x = 1,
+  by.y = 1)
+
+model <- merge(model,
+               data.frame(
+                 FIPS = raw_FoodStamps$GEO.id2,
+                 SNAP_Under18 = as.numeric(raw_FoodStamps$HC02_EST_VC03) / 100 * as.numeric(raw_FoodStamps$HC02_EST_VC01)
+                 ),
+               by.x = 1,
+               by.y = 1
+)
+
+
 
 
