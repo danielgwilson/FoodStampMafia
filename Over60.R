@@ -77,3 +77,13 @@ model <- merge(model, data.frame(
   by.x = 1,
   by.y = 1
 )
+
+model <- merge(model, data.frame(
+  FIPS = model$FIPS,
+  SNAP_Ratio= as.numeric(model$SNAP_Over60) / as.numeric(model$SNAP_Recipients)),
+  by.x = 1,
+  by.y = 1
+)
+
+
+
