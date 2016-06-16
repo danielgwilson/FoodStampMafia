@@ -70,3 +70,10 @@ model <- merge(model, data.frame(
  by.x = 1,
  by.y = 1
 )
+
+model <- merge(model, data.frame(
+  FIPS = model$FIPS,
+  SNAPEligible_Ratio = as.numeric(model$SNAPEligible_Over60) / as.numeric(model$SNAP_Eligible)),
+  by.x = 1,
+  by.y = 1
+)
