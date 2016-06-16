@@ -6,6 +6,7 @@
 # ----------------------------
 ##############################
 
+
 # inital setup
 setwd("~/Google Drive/Booz/FoodStampMafia")
 rm(list=ls())
@@ -21,7 +22,7 @@ train <- model[train_indeces, ] # save the sample indeces to train
 test <- model[-train_indeces, ] # save everything BUT the sample indeces to test
 
 library(rpart)
-fit <- rpart(SNAP_RatioSub50 ~ Population + FIPS + State, data=train, method = "class")
+fit <- rpart(SNAP_RatioSub75 ~ Population + FIPS, data=train, method = "class")
 plot(fit)
 text(fit)
 
@@ -39,3 +40,14 @@ test <- test[-which(test$State == "District of Columbia"),] # remove district of
 predictions <- predict(fit, test)
 print(predictions)
 distconfusionMatrix(predictions$class, y_test)
+
+install.packages('randomForest')
+library(randomForest)
+set.seed(415)
+
+
+
+# fit <- randomForest(as.factor(SNAP_RatioSub75) ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked + Title + FamilySize + FamilyID2,
+#                     data=train, 
+#                     importance=TRUE, 
+#                     ntree=2000)

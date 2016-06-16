@@ -70,6 +70,7 @@ write.csv(popcompare, file = "Elaine.csv", row.names = FALSE)
 
 ###______________________________Race of people below 125% PL from 2014
 
+# ACS is the data frame of the characteristics of people in different poverty status
 ACS <- read.csv("ACS_14_5YR_S1703_with_ann.csv", head=T, stringsAsFactors = FALSE)
 elaine <- read.csv("Elaine.csv", head=T, stringsAsFactors = F)
 # ACS$HC04_EST_VC22 # Sub125 Hispanic or Latino
@@ -81,6 +82,8 @@ elaine <- read.csv("Elaine.csv", head=T, stringsAsFactors = F)
 # ACS$HC04_EST_VC19 # Sub125 Others
 # ACS$HC04_EST_VC20 # Sub125 2 or more races
 ACS$GEO.id2 <- as.numeric(ACS$GEO.id2)
+
+# Calculate the number (not percentage) of number of population under 125% PL by race
 ACS$HC04_EST_VC22 <- (as.numeric(ACS$HC01_EST_VC22)/100) * as.numeric(ACS$HC04_EST_VC22)
 ACS$HC04_EST_VC23 <- (as.numeric(ACS$HC01_EST_VC23)/100) * as.numeric(ACS$HC04_EST_VC23)
 ACS$HC04_EST_VC15 <- (as.numeric(ACS$HC01_EST_VC15)/100) * as.numeric(ACS$HC04_EST_VC15)
@@ -90,6 +93,7 @@ ACS$HC04_EST_VC18 <- (as.numeric(ACS$HC01_EST_VC18)/100) * as.numeric(ACS$HC04_E
 ACS$HC04_EST_VC19 <- (as.numeric(ACS$HC01_EST_VC19)/100) * as.numeric(ACS$HC04_EST_VC19)
 ACS$HC04_EST_VC20 <- (as.numeric(ACS$HC01_EST_VC20)/100) * as.numeric(ACS$HC04_EST_VC20)
 
+# merge race data into existing data set "elaine"
 elaine <- merge(elaine, data.frame(GEO.id2 = ACS$GEO.id2,
                                            Hispanic_Sub125 = ACS$HC04_EST_VC22,
                                            White_Sub125 = ACS$HC04_EST_VC23,
@@ -99,5 +103,30 @@ elaine <- merge(elaine, data.frame(GEO.id2 = ACS$GEO.id2,
                                            Island_Sub125 = ACS$HC04_EST_VC18,
                                            Others_Sub125 = ACS$HC04_EST_VC19,
                                            More_Sub125 = ACS$HC04_EST_VC20),
+                by.x = "FIPS", by.y = "GEO.id2", all = T)
+
+# just renaming the column names to avoid confusion.
+# the format is: description_category(if applicable)_year
+names(elaine) <- c("FIPS", "PopMean_2010", "UrbanRuralStatus_2013", "Hispanic_Race_2014",
+                   "White_Race_2014", "Black_Race_2014", "Native_Race_2014", "Asian_Race_2014",
+                   "Islander_Race_2014", "Others_Race_2014", "More_Race_2014")
+write.csv(elaine, file = "Elaine.csv", row.names = FALSE)
+
+
+#
+#
+#
+
+###______________________________Gender of people below 125% PL from 2014
+
+# ACS$HC01_EST_VC03 total number of male in each county
+# ACS$HC01_EST_VC04 total number of female in each county
+ACS$HC04_EST_VC03 <- (as.numeric(ACS$HC01_EST_VC03)/100) * as.numeric(ACS$HC04_EST_VC03)
+ACS$HC04_EST_VC04 <- (as.numeric(ACS$HC01_EST_VC04)/100) * as.numeric(ACS$HC04_EST_VC04)
+
+# merge gender data into existing data set "elaine"
+elaine <- merge(elaine, data.frame(GEO.id2 = ACS$GEO.id2,
+                                   Male_Sex_Sub125 = ACS$HC04_EST_VC03,
+                                   Female_Sex_Sub125 = ACS$HC04_EST_VC04),
                 by.x = "FIPS", by.y = "GEO.id2", all = T)
 write.csv(elaine, file = "Elaine.csv", row.names = FALSE)
