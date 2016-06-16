@@ -1,4 +1,4 @@
-"FIPS","County","State","Poverty_Sub125","SNAP_Recipients","SNAP_ParticipationRatio","Population","SNAP_RatioSub50"
+"FIPS","County","State","Poverty_Sub125","SNAP_Recipients","SNAP_ParticipationRatio","Population","SNAP_RatioSub75"
 1001,"Autauga County","Alabama",7647.84,7593,0.992829347894307,54632,0
 1003,"Baldwin County","Alabama",27627.204,20604,0.745786652894734,183195,1
 1005,"Barbour County","Alabama",7814.835,6324,0.809230137296565,27411,0
