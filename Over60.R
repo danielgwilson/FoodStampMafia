@@ -33,3 +33,11 @@ model <- merge(model,
   by.y = 1
   )
 
+model <- merge(model, data.frame(
+  FIPS = raw_FoodStamps$GEO.id2,
+  SNAP_Over60 = as.numeric(raw_FoodStamps$HC02_EST_VC02) / 100 * as.numeric(raw_FoodStamps$HC02_EST_VC01)),
+  by.x = 1,
+  by.y = 1
+  )
+
+
