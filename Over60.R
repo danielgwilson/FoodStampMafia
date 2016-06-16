@@ -39,6 +39,7 @@ model <- merge(model, data.frame(
   by.y = 1
 )
 
+# Total amount of people who are over 60 years old in each county 
 model <- merge(model,
                data.frame(
                  FIPS = raw_AgeSex$GEO.id2,
@@ -48,6 +49,7 @@ model <- merge(model,
   by.y = 1
   )
 
+# SNAP Recipients who are over 60 years old 
 model <- merge(model, data.frame(
   FIPS = raw_FoodStamps$GEO.id2,
   SNAP_Over60 = as.numeric(raw_FoodStamps$HC02_EST_VC02) / 100 * as.numeric(raw_FoodStamps$HC02_EST_VC01)),
@@ -64,6 +66,7 @@ model <- merge(model, data.frame(
   by.y = 1
 )
 
+# People over 60 years old who are on SNAP divided by people over 60 years old who are eligible 
 model <- merge(model, data.frame(
   FIPS = model$FIPS,
   SNAP_to_NonSNAP60 = as.numeric(model$SNAP_Over60) / as.numeric(model$SNAPEligible_Over60)),
@@ -71,6 +74,7 @@ model <- merge(model, data.frame(
  by.y = 1
 )
 
+# SNAP Eligible over 60 years old divided by total SNAP eligible people 
 model <- merge(model, data.frame(
   FIPS = model$FIPS,
   SNAPEligible_Ratio = as.numeric(model$SNAPEligible_Over60) / as.numeric(model$SNAP_Eligible)),
@@ -78,6 +82,7 @@ model <- merge(model, data.frame(
   by.y = 1
 )
 
+# SNAP Recipients over 60 years old divided by total SNAP Recipients
 model <- merge(model, data.frame(
   FIPS = model$FIPS,
   SNAP_Ratio= as.numeric(model$SNAP_Over60) / as.numeric(model$SNAP_Recipients)),
