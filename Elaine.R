@@ -130,3 +130,10 @@ elaine <- merge(elaine, data.frame(GEO.id2 = ACS$GEO.id2,
                                    Female_Sex_Sub125 = ACS$HC04_EST_VC04),
                 by.x = "FIPS", by.y = "GEO.id2", all = T)
 write.csv(elaine, file = "Elaine.csv", row.names = FALSE)
+
+
+#
+#
+#
+
+###______________________________Age of people below 125% PL from 2014
