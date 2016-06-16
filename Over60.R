@@ -43,8 +43,7 @@ model <- merge(model,
                data.frame(
                  FIPS = raw_AgeSex$GEO.id2,
                  Total_Over60 = ((as.numeric(raw_AgeSex$HC01_EST_VC15) + as.numeric(raw_AgeSex$HC01_EST_VC16) + as.numeric(raw_AgeSex$HC01_EST_VC17) 
-                   + as.numeric(raw_AgeSex$HC01_EST_VC18) + as.numeric(raw_AgeSex$HC01_EST_VC19) + as.numeric(raw_AgeSex$HC01_EST_VC20))
-                   / 100 * as.numeric(raw_AgeSex$HC01_EST_VC01))),
+                   + as.numeric(raw_AgeSex$HC01_EST_VC18) + as.numeric(raw_AgeSex$HC01_EST_VC19) + as.numeric(raw_AgeSex$HC01_EST_VC20))  / 100 * as.numeric(raw_AgeSex$HC01_EST_VC01))),
   by.x = 1, 
   by.y = 1
   )
@@ -65,3 +64,9 @@ model <- merge(model, data.frame(
   by.y = 1
 )
 
+model <- merge(model, data.frame(
+  FIPS = model$FIPS,
+  SNAP_to_NonSNAP60 = as.numeric(model$SNAP_Over60) / as.numeric(model$SNAPEligible_Over60)),
+ by.x = 1,
+ by.y = 1
+)
