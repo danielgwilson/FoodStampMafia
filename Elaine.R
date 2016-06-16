@@ -137,3 +137,87 @@ write.csv(elaine, file = "Elaine.csv", row.names = FALSE)
 #
 
 ###______________________________Age of people below 125% PL from 2014
+
+# ACS$HC01_EST_VC07 total number of people under 18 years old in each county
+# ACS$HC01_EST_VC09 total number of people age 18-64 in each county
+# ACS$HC01_EST_VC10 total number of people 65 years and over in each county
+
+ACS$HC04_EST_VC07 <- (as.numeric(ACS$HC01_EST_VC07)/100) * as.numeric(ACS$HC04_EST_VC07)
+ACS$HC04_EST_VC09 <- (as.numeric(ACS$HC01_EST_VC09)/100) * as.numeric(ACS$HC04_EST_VC09)
+ACS$HC04_EST_VC10 <- (as.numeric(ACS$HC01_EST_VC10)/100) * as.numeric(ACS$HC04_EST_VC10)
+
+# merge age data into existing data set "elaine"
+elaine <- merge(elaine, data.frame(GEO.id2 = ACS$GEO.id2,
+                                   Sub18_Age_Sub125 = ACS$HC04_EST_VC07,
+                                   From18To64_Age_Sub125 = ACS$HC04_EST_VC09,
+                                   Over65and65_Age_Sub125 = ACS$HC04_EST_VC10),
+                by.x = "FIPS", by.y = "GEO.id2", all = T)
+write.csv(elaine, file = "Elaine.csv", row.names = FALSE)
+
+
+
+#
+#
+#
+
+###______________________________Educational attainment of people below 125% PL from 2014
+
+# ACS$HC01_EST_VC33 total number of people over 25 years old and less than high school degree in each county
+# ACS$HC01_EST_VC34 total number of people over 25 years old and equivalent of high school graduate in each county
+# ACS$HC01_EST_VC35 total number of people over 25 years old and some college/associate's degree in each county
+# ACS$HC01_EST_VC36 total number of people over 25 years old and bachelor's degree or higher in each county
+
+ACS$HC04_EST_VC33 <- (as.numeric(ACS$HC01_EST_VC33)/100) * as.numeric(ACS$HC04_EST_VC33)
+ACS$HC04_EST_VC34 <- (as.numeric(ACS$HC01_EST_VC34)/100) * as.numeric(ACS$HC04_EST_VC34)
+ACS$HC04_EST_VC35 <- (as.numeric(ACS$HC01_EST_VC35)/100) * as.numeric(ACS$HC04_EST_VC35)
+ACS$HC04_EST_VC36 <- (as.numeric(ACS$HC01_EST_VC36)/100) * as.numeric(ACS$HC04_EST_VC36)
+
+# merge age data into existing data set "elaine"
+elaine <- merge(elaine, data.frame(GEO.id2 = ACS$GEO.id2,
+                                   LessThanHighSchool_Edu_Sub125 = ACS$HC04_EST_VC33,
+                                   HighSchoolGraduate_Edu_Sub125 = ACS$HC04_EST_VC34,
+                                   CollegeDegree_Edu_Sub125 = ACS$HC04_EST_VC35,
+                                   BachelorOrHigher_Edu_Sub125 = ACS$HC04_EST_VC36),
+                by.x = "FIPS", by.y = "GEO.id2", all = T)
+write.csv(elaine, file = "Elaine.csv", row.names = FALSE)
+
+
+#
+#
+#
+
+###______________________________Disability status of people below 125% PL from 2014
+
+# ACS$HC01_EST_VC44 total number of people with any disability in each county
+# ACS$HC01_EST_VC45 total number of people with no disability in each county
+
+ACS$HC04_EST_VC44 <- (as.numeric(ACS$HC01_EST_VC44)/100) * as.numeric(ACS$HC04_EST_VC44)
+ACS$HC04_EST_VC45 <- (as.numeric(ACS$HC01_EST_VC45)/100) * as.numeric(ACS$HC04_EST_VC45)
+
+# merge age data into existing data set "elaine"
+elaine <- merge(elaine, data.frame(GEO.id2 = ACS$GEO.id2,
+                                   Yes_Disability_Sub125 = ACS$HC04_EST_VC44,
+                                   No_Disability_Sub125 = ACS$HC04_EST_VC45),
+                by.x = "FIPS", by.y = "GEO.id2", all = T)
+write.csv(elaine, file = "Elaine.csv", row.names = FALSE)
+#
+#
+#
+
+###______________________________Work status of people below 125% PL from 2014
+
+# ACS$HC01_EST_VC49 total number of people 16-64 and worked full-time year-round in each county
+# ACS$HC01_EST_VC50 total number of people 16-64 and worked less than full-time year-round in each county
+# ACS$HC01_EST_VC51 total number of people 16-64 and didn't work in each county
+
+ACS$HC04_EST_VC49 <- (as.numeric(ACS$HC01_EST_VC49)/100) * as.numeric(ACS$HC04_EST_VC49)
+ACS$HC04_EST_VC50 <- (as.numeric(ACS$HC01_EST_VC50)/100) * as.numeric(ACS$HC04_EST_VC50)
+ACS$HC04_EST_VC51 <- (as.numeric(ACS$HC01_EST_VC51)/100) * as.numeric(ACS$HC04_EST_VC51)
+
+# merge age data into existing data set "elaine"
+elaine <- merge(elaine, data.frame(GEO.id2 = ACS$GEO.id2,
+                                   Fulltime_Work_Sub125 = ACS$HC04_EST_VC49,
+                                   Parttime_Work_Sub125 = ACS$HC04_EST_VC50,
+                                   No_Work_Sub125 = ACS$HC04_EST_VC51),
+                by.x = "FIPS", by.y = "GEO.id2", all = T)
+write.csv(elaine, file = "Elaine.csv", row.names = FALSE)
